@@ -1,6 +1,7 @@
 import Navbar from "./components/Navbar.js";
 import CitySelectModal from "./components/Cityselectmodal.js";
 import Footer from "./components/Footer.js";
+import AIAssistant from "./components/AIAssistant";
 import { ThemeProvider } from "./context/ThemeContext.js";
 import { PrayerProvider } from "./context/PrayerContext.js";
 import { AuthProvider } from "./context/Authcontext.js";
@@ -35,7 +36,6 @@ export default function RootLayout({ children }) {
               <Toaster
                 position="top-center"
                 toastOptions={{
-                  // Default options
                   duration: 3000,
                   style: {
                     background: '#10b981',
@@ -45,7 +45,6 @@ export default function RootLayout({ children }) {
                     fontSize: '14px',
                     fontWeight: '500',
                   },
-                  // Success
                   success: {
                     duration: 3000,
                     iconTheme: {
@@ -53,7 +52,6 @@ export default function RootLayout({ children }) {
                       secondary: '#10b981',
                     },
                   },
-                  // Error
                   error: {
                     duration: 4000,
                     style: {
@@ -65,7 +63,6 @@ export default function RootLayout({ children }) {
                       secondary: '#ef4444',
                     },
                   },
-                  // Loading
                   loading: {
                     style: {
                       background: '#6b7280',
@@ -77,8 +74,11 @@ export default function RootLayout({ children }) {
               
               <CitySelectModal />
               <Navbar />
-              <main className="p-4 max-w-7xl mx-auto min-h-screen">{children}</main>
+              <main className="p-4 max-w-7xl mx-auto min-h-screen">
+                {children}
+              </main>
               <Footer />
+              <AIAssistant />
             </PrayerProvider>
           </AuthProvider>
         </ThemeProvider>

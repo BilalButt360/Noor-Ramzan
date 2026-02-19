@@ -1,8 +1,11 @@
+// app/page.js
 'use client'
 
 import Countdown from './components/Countdown'
 import { usePrayers } from './context/PrayerContext'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 const features = [
   {
@@ -91,36 +94,82 @@ const ramzanPhases = [
 
 export default function HomePage() {
   const { prayers, loading, city, changeCity } = usePrayers()
+  const [greeting, setGreeting] = useState('')
+
+  useEffect(() => {
+    const hour = new Date().getHours()
+    if (hour < 12) setGreeting('🌅 Subah Bakhair')
+    else if (hour < 17) setGreeting('☀️ Do Pehar Bakhair')
+    else if (hour < 20) setGreeting('🌇 Sham Bakhair')
+    else setGreeting('🌙 Raat Bakhair')
+  }, [])
 
   const randomTip = dailyTips[new Date().getDate() % dailyTips.length]
+  const currentRamzanDay = Math.floor((new Date() - new Date(2026, 1, 19)) / (1000 * 60 * 60 * 24)) + 1
 
   return (
     <div className="space-y-12 pb-12">
 
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden rounded-3xl p-8 md:p-14 bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white">
+      {/* ── Hero Section ── */}
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative overflow-hidden rounded-3xl p-8 md:p-14 bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white"
+      >
         <div className="relative z-10 max-w-3xl space-y-5">
-          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur px-4 py-1.5 rounded-full text-sm font-medium">
-            <span>🌙</span> رمضان کریم 1447
-          </div>
+          
+          {/* Greeting Badge */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center gap-2 bg-white/15 backdrop-blur px-4 py-1.5 rounded-full text-sm font-medium"
+          >
+            <span>{greeting}</span>
+            <span>•</span>
+            <span>🌙 رمضان 1447</span>
+          </motion.div>
 
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+          {/* Main Heading */}
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-4xl md:text-6xl font-bold leading-tight"
+          >
             Your Ramzan<br />
             <span className="text-emerald-300">Companion</span>
-          </h1>
-          <p className="text-white/75 text-lg max-w-xl">
-            Prayer times, Al-Quran, Duas, Tasbeeh counter and Ibadah tracker — everything you need for a blessed Ramzan.
-          </p>
+          </motion.h1>
 
-          <div>
+          {/* Description */}
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-white/75 text-lg max-w-xl"
+          >
+            Prayer times, Al-Quran, Duas, Tasbeeh counter and Ibadah tracker — everything you need for a blessed Ramzan.
+          </motion.p>
+
+          {/* Countdown */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
             <p className="text-sm text-white/60 mb-2 uppercase tracking-widest font-medium">
               Ramzan Countdown
             </p>
             <Countdown />
-          </div>
+          </motion.div>
 
-          {/* City display with change option */}
-          <div className="flex items-center gap-3">
+          {/* City Display with Change Option */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="flex items-center gap-3"
+          >
             {city ? (
               <>
                 <div className="flex items-center gap-2 text-white/80 text-sm bg-white/10 px-3 py-1.5 rounded-full">
@@ -141,9 +190,15 @@ export default function HomePage() {
                 <span>📍</span> Select Your City
               </button>
             )}
-          </div>
+          </motion.div>
 
-          <div className="flex flex-wrap gap-3 pt-2">
+          {/* Quick Action Buttons */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="flex flex-wrap gap-3 pt-2"
+          >
             <Link
               href="/al-quran"
               className="bg-white text-emerald-700 font-bold px-6 py-2.5 rounded-xl hover:bg-emerald-50 transition shadow-lg"
@@ -156,65 +211,107 @@ export default function HomePage() {
             >
               🕌 Prayer Times
             </Link>
-          </div>
+            <Link
+              href="/duas"
+              className="bg-white/10 backdrop-blur text-white font-semibold px-6 py-2.5 rounded-xl hover:bg-white/20 transition border border-white/20"
+            >
+              🤲 Duas
+            </Link>
+          </motion.div>
         </div>
 
-        {/* Decoratives */}
+        {/* Decorative Elements */}
         <div className="absolute -right-16 -bottom-16 w-80 h-80 bg-emerald-400/20 blur-3xl rounded-full" />
         <div className="absolute right-0 top-0 w-48 h-48 bg-yellow-300/10 blur-2xl rounded-full" />
-      </section>
+        
+        {/* Islamic Pattern Overlay */}
+        <svg className="absolute right-10 top-10 w-32 h-32 text-white/5" viewBox="0 0 100 100">
+          <path d="M50 10 L90 30 L90 70 L50 90 L10 70 L10 30 Z" fill="currentColor" />
+        </svg>
+      </motion.section>
 
       {/* ── Prayer Times Quick View ── */}
-      <section>
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold dark:text-white">Today's Prayer Times</h2>
-          <Link href="/prayer-times" className="text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:underline">
-            View all →
+          <Link href="/prayer-times" className="text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:underline flex items-center gap-1">
+            View all <span>→</span>
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {loading && (
-            <div className="col-span-5 text-center py-8 text-gray-400 dark:text-gray-600">
-              <div className="animate-spin text-3xl mb-2">🌀</div>
-              <p>Loading prayer times...</p>
-            </div>
-          )}
-          {!loading && prayers.length === 0 && (
-            <div className="col-span-5 text-center py-8">
-              <button
-                onClick={changeCity}
-                className="inline-flex items-center gap-2 bg-emerald-600 text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-emerald-700 transition cursor-pointer"
-              >
-                📍 Select City to Load Prayer Times
-              </button>
-            </div>
-          )}
-          {!loading && prayers.map((p) => (
-            <div
-              key={p.name}
-              className={`p-4 rounded-2xl transition-all duration-200 ${p.isNext
-                ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-500/30 scale-105'
-                : 'bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md'
-                }`}
+
+        {loading && (
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {[1,2,3,4,5].map(i => (
+              <div key={i} className="p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 animate-pulse h-24" />
+            ))}
+          </div>
+        )}
+
+        {!loading && prayers.length === 0 && (
+          <div className="text-center py-8 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
+            <p className="text-gray-500 dark:text-gray-400 mb-3">Prayer times not loaded yet</p>
+            <button
+              onClick={changeCity}
+              className="inline-flex items-center gap-2 bg-emerald-600 text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-emerald-700 transition cursor-pointer"
             >
-              <p className={`text-xs font-semibold uppercase tracking-widest mb-1 ${p.isNext ? 'text-emerald-200' : 'text-gray-400 dark:text-gray-500'}`}>
-                {p.name}
-              </p>
-              <p className="text-xl font-bold  dark:text-white">
-                {p.time}
-              </p>
-              {p.isNext && (
-                <span className="mt-2 inline-block text-xs bg-white/20 px-2 py-0.5 rounded-full">
-                  Next ▶
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
+              📍 Select City to Load Prayer Times
+            </button>
+          </div>
+        )}
+
+        {!loading && prayers.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {prayers.map((p, index) => (
+              <motion.div
+                key={p.name}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + index * 0.1 }}
+                className={`p-4 rounded-2xl transition-all duration-200 ${
+                  p.isNext
+                    ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-500/30 scale-105'
+                    : 'bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md'
+                }`}
+              >
+                <p className={`text-xs font-semibold uppercase tracking-widest mb-1 ${
+                  p.isNext ? 'text-emerald-200' : 'text-gray-400 dark:text-gray-500'
+                }`}>
+                  {p.name}
+                </p>
+                <p className="text-xl font-bold dark:text-white">
+                  {p.time}
+                </p>
+                {p.isNext && (
+                  <span className="mt-2 inline-block text-xs bg-white/20 px-2 py-0.5 rounded-full">
+                    Next ▶
+                  </span>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* Current Ramzan Day Info */}
+        {currentRamzanDay >= 1 && currentRamzanDay <= 30 && (
+          <div className="mt-3 text-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              🌙 Ramzan ka {currentRamzanDay} wa din • {currentRamzanDay <= 10 ? 'Rahmat' : currentRamzanDay <= 20 ? 'Maghfirat' : 'Nijaat'} ka ashra
+            </p>
+          </div>
+        )}
+      </motion.section>
 
       {/* ── Daily Tip ── */}
-      <section className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 border border-amber-200 dark:border-amber-800">
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 border border-amber-200 dark:border-amber-800"
+      >
         <div className="flex gap-4 items-start">
           <span className="text-3xl">💡</span>
           <div>
@@ -225,38 +322,57 @@ export default function HomePage() {
           </div>
         </div>
         <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-300/20 blur-2xl rounded-full" />
-      </section>
+      </motion.section>
 
       {/* ── Features Grid ── */}
-      <section>
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
         <h2 className="text-xl font-bold dark:text-white mb-5">Explore Noor Ramzan</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {features.map((f) => (
-            <Link
+          {features.map((f, index) => (
+            <motion.div
               key={f.href}
-              href={f.href}
-              className="group relative overflow-hidden p-6 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 + index * 0.1 }}
+              whileHover={{ y: -5 }}
             >
-              <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${f.color} text-white text-2xl shadow-lg mb-4 group-hover:scale-110 transition-transform`}>
-                {f.icon}
-              </div>
-              <h3 className="font-bold dark:text-white mb-1">{f.title}</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{f.desc}</p>
-              <span className="absolute bottom-4 right-4 text-gray-300 dark:text-gray-700 group-hover:text-emerald-500 transition-colors text-lg">→</span>
-            </Link>
+              <Link
+                href={f.href}
+                className="group relative overflow-hidden p-6 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-xl transition-all duration-300 block"
+              >
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${f.color} text-white text-2xl shadow-lg mb-4 group-hover:scale-110 transition-transform`}>
+                  {f.icon}
+                </div>
+                <h3 className="font-bold dark:text-white mb-1">{f.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{f.desc}</p>
+                <span className="absolute bottom-4 right-4 text-gray-300 dark:text-gray-700 group-hover:text-emerald-500 transition-colors text-lg">→</span>
+              </Link>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* ── Ramzan Phases ── */}
-      <section>
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+      >
         <h2 className="text-xl font-bold dark:text-white mb-5">
           🌙 The Three Ashras of Ramzan
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {ramzanPhases.map((phase) => (
-            <div
+          {ramzanPhases.map((phase, index) => (
+            <motion.div
               key={phase.days}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.9 + index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
               className={`rounded-2xl p-6 border ${phase.color} transition-all hover:shadow-md`}
             >
               <div className="flex items-center justify-between mb-3">
@@ -268,13 +384,18 @@ export default function HomePage() {
               <p className={`text-2xl font-bold ${phase.accent}`}>{phase.arabic}</p>
               <p className="font-semibold text-gray-700 dark:text-gray-200 mb-1">{phase.english}</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">{phase.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* ── Hadith Banner ── */}
-      <section className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white text-center">
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.0 }}
+        className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white text-center"
+      >
         <p className="text-sm uppercase tracking-widest text-emerald-300 mb-3 font-medium">
           Hadith of Ramzan
         </p>
@@ -285,10 +406,11 @@ export default function HomePage() {
           {`"Whoever fasts in Ramzan with faith and seeking reward, all his previous sins will be forgiven."`}
         </p>
         <p className="text-emerald-300 text-xs mt-3 font-medium">— Bukhari & Muslim</p>
+        
+        {/* Decorative elements */}
         <div className="absolute -left-8 -bottom-8 w-40 h-40 bg-emerald-500/20 blur-3xl rounded-full" />
         <div className="absolute -right-8 -top-8 w-32 h-32 bg-yellow-300/10 blur-2xl rounded-full" />
-      </section>
-
+      </motion.section>
     </div>
   )
 }
