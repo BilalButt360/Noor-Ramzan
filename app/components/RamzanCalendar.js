@@ -5,6 +5,7 @@ import { usePrayers } from '../context/PrayerContext'
 import { format } from 'date-fns'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { downloadRamzanCalendarPDF } from './PDFDownload'
 
 // Pakistan cities with their coordinates
 const PAKISTAN_CITIES = {
@@ -49,9 +50,9 @@ const HIGHLIGHTS = [
 ]
 
 const ASHRA = [
-  { 
-    days: '1–10', 
-    name: 'Rahmat', 
+  {
+    days: '1–10',
+    name: 'Rahmat',
     arabic: 'رحمت',
     meaning: 'Mercy of Allah',
     color: 'from-blue-400 to-blue-600',
@@ -61,9 +62,9 @@ const ASHRA = [
     icon: '🤲',
     description: 'Allah showers His infinite mercy'
   },
-  { 
-    days: '11–20', 
-    name: 'Maghfirat', 
+  {
+    days: '11–20',
+    name: 'Maghfirat',
     arabic: 'مغفرت',
     meaning: 'Forgiveness',
     color: 'from-purple-400 to-purple-600',
@@ -73,16 +74,16 @@ const ASHRA = [
     icon: '💜',
     description: 'Seek forgiveness abundantly'
   },
-  { 
-    days: '21–30', 
-    name: 'Nijaat', 
+  {
+    days: '21–30',
+    name: 'Nijaat',
     arabic: 'نجات',
     meaning: 'Salvation from Hellfire',
     color: 'from-emerald-400 to-emerald-600',
     bg: 'bg-emerald-50 dark:bg-emerald-900/20',
     border: 'border-emerald-200 dark:border-emerald-800',
     text: 'text-emerald-600 dark:text-emerald-400',
-    icon: '🌟',
+    icon: '⭐',
     description: 'Liberation and Laylatul Qadr'
   },
 ]
@@ -132,11 +133,11 @@ export default function RamzanCalendar() {
     setLoadProgress(0)
     setUsingFallback(false)
     const city = PAKISTAN_CITIES[selectedCity]
-    
+
     try {
       const days = []
       const cacheKey = `${selectedCity}-ramzan-2026`
-      
+
       // Check cache first
       if (apiCache.has(cacheKey)) {
         setRamzanDays(apiCache.get(cacheKey))
@@ -144,56 +145,56 @@ export default function RamzanCalendar() {
         // toast.success(`Ramzan calendar loaded for ${selectedCity}`)
         return
       }
-      
+
       // Try to fetch from API
       let successfulFetches = 0
-      
+
       for (let i = 0; i < 30; i++) {
         const date = new Date(RAMZAN_START_DATE)
         date.setDate(date.getDate() + i)
         const timestamp = Math.floor(date.getTime() / 1000)
-        
+
         // Update progress
         setLoadProgress(Math.round(((i + 1) / 30) * 100))
-        
+
         // Add delay to avoid rate limiting (max 3 requests per second)
         if (i > 0 && i % 3 === 0) {
           await new Promise(resolve => setTimeout(resolve, 1200))
         }
-        
+
         try {
           const response = await fetch(`/api/prayer-times?date=${timestamp}&lat=${city.lat}&lng=${city.lng}`)
-          
+
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`)
           }
-          
+
           const data = await response.json()
           const timings = data.data.timings
-          
+
           // Get Hijri date from API
           const hijriDate = data.data.date.hijri.date
-          
+
           // Fajr is Sehri end time, Maghrib is Iftar time
           const sehriEnd = timings.Fajr
           const iftarTime = timings.Maghrib
-          
+
           // Calculate Sehri start (1.5 hours before Fajr)
           const [fajrHour, fajrMin] = sehriEnd.split(':').map(Number)
           let sehriHour = fajrHour - 1
           let sehriMin = fajrMin - 30
-          
+
           if (sehriMin < 0) {
             sehriMin += 60
             sehriHour -= 1
           }
-          
+
           if (sehriHour < 0) {
             sehriHour += 24
           }
-          
+
           const sehriStart = `${String(sehriHour).padStart(2, '0')}:${String(sehriMin).padStart(2, '0')}`
-          
+
           days.push({
             day: i + 1,
             date: format(date, 'MMM dd, yyyy'),
@@ -209,11 +210,11 @@ export default function RamzanCalendar() {
             weekday: format(date, 'EEEE'),
             isAccurate: true
           })
-          
+
           successfulFetches++
         } catch (error) {
           console.warn(`Failed to fetch day ${i + 1}, using fallback`)
-          
+
           // Use fallback data for this day
           const fallbackDay = generateFallbackDay(i + 1, date, selectedCity)
           days.push({
@@ -222,28 +223,28 @@ export default function RamzanCalendar() {
           })
         }
       }
-      
+
       // Sort by day
       days.sort((a, b) => a.day - b.day)
-      
+
       // Cache the results
       apiCache.set(cacheKey, days)
       setRamzanDays(days)
-      
+
       // Show appropriate message
-      if (successfulFetches === 30) {
-        toast.success(`Complete Ramzan calendar loaded for ${selectedCity}`)
-      } else if (successfulFetches > 0) {
-        toast.success(`Loaded ${successfulFetches} accurate days for ${selectedCity}`)
-        setUsingFallback(true)
-      } else {
-        setUsingFallback(true)
-        toast.error('Using offline data. Connect to internet for accurate times.')
-      }
-      
+      // if (successfulFetches === 30) {
+      //   toast.success(`Complete Ramzan calendar loaded for ${selectedCity}`)
+      // } else if (successfulFetches > 0) {
+      //   toast.success(`Loaded ${successfulFetches} accurate days for ${selectedCity}`)
+      //   setUsingFallback(true)
+      // } else {
+      //   setUsingFallback(true)
+      //   toast.error('Using offline data. Connect to internet for accurate times.')
+      // }
+
     } catch (error) {
       console.error('Error fetching Ramzan times:', error)
-      
+
       // Generate all days using fallback
       const fallbackDays = []
       for (let i = 0; i < 30; i++) {
@@ -251,11 +252,11 @@ export default function RamzanCalendar() {
         date.setDate(date.getDate() + i)
         fallbackDays.push(generateFallbackDay(i + 1, date, selectedCity))
       }
-      
+
       setRamzanDays(fallbackDays)
       setUsingFallback(true)
       toast.error('Using offline data. Connect to internet for accurate times.')
-      
+
     } finally {
       setLoading(false)
     }
@@ -265,16 +266,16 @@ export default function RamzanCalendar() {
   const generateFallbackDay = (day, date, city) => {
     // Use precalculated data if available, otherwise generate
     const cityData = PRECALCULATED_DATA[city] || PRECALCULATED_DATA['Lahore']
-    
+
     // Times change gradually over the month
     const variation = cityData.variation || 0.5
     const sehriMinuteOffset = Math.floor(day * variation)
     const iftarMinuteOffset = Math.floor(day * variation * 1.2)
-    
+
     // Parse base times
     const [baseSehriHour, baseSehriMin] = cityData.sehri.end.split(':').map(Number)
     const [baseIftarHour, baseIftarMin] = cityData.iftar.split(':').map(Number)
-    
+
     // Calculate adjusted times
     let sehriMin = baseSehriMin - sehriMinOffset
     let sehriHour = baseSehriHour
@@ -282,17 +283,17 @@ export default function RamzanCalendar() {
       sehriMin += 60
       sehriHour -= 1
     }
-    
+
     let iftarMin = baseIftarMin + iftarMinOffset
     let iftarHour = baseIftarHour
     if (iftarMin >= 60) {
       iftarMin -= 60
       iftarHour += 1
     }
-    
+
     const sehriEnd = `${String(sehriHour).padStart(2, '0')}:${String(sehriMin).padStart(2, '0')}`
     const iftarTime = `${String(iftarHour).padStart(2, '0')}:${String(iftarMin).padStart(2, '0')}`
-    
+
     // Calculate Sehri start (1.5 hours before)
     let sehriStartHour = sehriHour - 1
     let sehriStartMin = sehriMin - 30
@@ -304,7 +305,7 @@ export default function RamzanCalendar() {
       sehriStartHour += 24
     }
     const sehriStart = `${String(sehriStartHour).padStart(2, '0')}:${String(sehriStartMin).padStart(2, '0')}`
-    
+
     return {
       day,
       date: format(date, 'MMM dd, yyyy'),
@@ -336,7 +337,7 @@ export default function RamzanCalendar() {
     (today - RAMZAN_START_DATE) / (1000 * 60 * 60 * 24)
   ) + 1
 
-  const displayedDays = view === 'odd' 
+  const displayedDays = view === 'odd'
     ? ramzanDays.filter(d => d.day % 2 !== 0)
     : ramzanDays
 
@@ -351,7 +352,7 @@ export default function RamzanCalendar() {
   return (
     <div className="space-y-8 pb-12">
       {/* Hero Section with City Selector */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-800 via-emerald-900 to-teal-900 text-white"
@@ -360,7 +361,7 @@ export default function RamzanCalendar() {
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -right-20 -top-20 w-80 h-80 bg-emerald-500/20 rounded-full blur-3xl" />
           <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-teal-500/20 rounded-full blur-3xl" />
-          
+
           {/* Islamic Pattern */}
           <svg className="absolute right-10 top-10 w-32 h-32 text-white/5" viewBox="0 0 100 100">
             <path d="M50 10 L90 30 L90 70 L50 90 L10 70 L10 30 Z" fill="currentColor" />
@@ -370,7 +371,7 @@ export default function RamzanCalendar() {
         <div className="relative z-10 p-8 md:p-12">
           <div className="max-w-3xl">
             {/* Badge */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
@@ -385,7 +386,7 @@ export default function RamzanCalendar() {
               )}
             </motion.div>
 
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -394,7 +395,7 @@ export default function RamzanCalendar() {
               Ramzan Calendar
             </motion.h1>
 
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
@@ -404,7 +405,7 @@ export default function RamzanCalendar() {
             </motion.p>
 
             {/* City Selector and Status */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -438,11 +439,10 @@ export default function RamzanCalendar() {
                               setSelectedCity(city)
                               setShowCitySelector(false)
                             }}
-                            className={`w-full text-left px-4 py-3 rounded-xl transition ${
-                              city === selectedCity
+                            className={`w-full text-left px-4 py-3 rounded-xl transition ${city === selectedCity
                                 ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
                                 : 'hover:bg-gray-50 dark:hover:bg-gray-800'
-                            }`}
+                              }`}
                           >
                             {city}
                           </button>
@@ -462,14 +462,14 @@ export default function RamzanCalendar() {
             </motion.div>
 
             {/* Progress bar for loading */}
-            {loading && loadProgress > 0 && (
+            {/* {loading && loadProgress > 0 && (
               <div className="mt-6 max-w-md">
                 <div className="flex justify-between text-xs text-white/70 mb-1">
                   <span>Loading calendar...</span>
                   <span>{loadProgress}%</span>
                 </div>
                 <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
-                  <motion.div 
+                  <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${loadProgress}%` }}
                     className="bg-gradient-to-r from-emerald-400 to-emerald-300 h-2 rounded-full"
@@ -479,13 +479,13 @@ export default function RamzanCalendar() {
                   Fetching accurate prayer times for {selectedCity}
                 </p>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </motion.section>
 
       {/* Ashra Cards */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
@@ -501,7 +501,7 @@ export default function RamzanCalendar() {
             className={`relative overflow-hidden rounded-2xl p-6 ${ashra.bg} border ${ashra.border}`}
           >
             <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${ashra.color}`} />
-            
+
             <div className="flex items-start justify-between mb-4">
               <div>
                 <span className={`text-sm font-semibold ${ashra.text}`}>Days {ashra.days}</span>
@@ -512,26 +512,26 @@ export default function RamzanCalendar() {
               </div>
               <span className="text-4xl">{ashra.icon}</span>
             </div>
-            
+
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {ashra.meaning} — {ashra.description}
             </p>
 
             {/* Progress indicator */}
-            {currentRamzanDay >= parseInt(ashra.days.split('–')[0]) && 
-             currentRamzanDay <= parseInt(ashra.days.split('–')[1]) && (
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: '100%' }}
-                className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-emerald-400 to-emerald-600"
-              />
-            )}
+            {currentRamzanDay >= parseInt(ashra.days.split('–')[0]) &&
+              currentRamzanDay <= parseInt(ashra.days.split('–')[1]) && (
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: '100%' }}
+                  className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-emerald-400 to-emerald-600"
+                />
+              )}
           </motion.div>
         ))}
       </motion.div>
 
       {/* Filter Tabs */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
@@ -539,19 +539,18 @@ export default function RamzanCalendar() {
       >
         <div className="flex gap-3 flex-wrap">
           {[
-            { key: 'all', label: '📅 All 30 Days', icon: '📅' },
-            { key: 'odd', label: '⭐ Odd Nights (Last 10)', icon: '🌟' },
+            { key: 'all', label: 'All 30 Days', icon: '📅' },
+            { key: 'odd', label: 'Odd Nights (Last 10)', icon: '⭐' },
           ].map((tab) => (
             <motion.button
               key={tab.key}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setView(tab.key)}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all cursor-pointer ${
-                view === tab.key
+              className={`px-6 py-3 rounded-xl font-semibold transition-all cursor-pointer ${view === tab.key
                   ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-lg shadow-emerald-500/30'
                   : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-emerald-500'
-              }`}
+                }`}
             >
               <span className="mr-2">{tab.icon}</span>
               {tab.label}
@@ -592,7 +591,7 @@ export default function RamzanCalendar() {
       ) : (
         <>
           {/* Calendar Grid */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
@@ -602,7 +601,7 @@ export default function RamzanCalendar() {
               const highlight = getHighlight(day.day)
               const ashra = getAshra(day.day)
               const isToday = day.day === currentRamzanDay
-              
+
               return (
                 <motion.div
                   key={day.day}
@@ -611,17 +610,15 @@ export default function RamzanCalendar() {
                   transition={{ delay: 1 + index * 0.05 }}
                   whileHover={{ scale: 1.01 }}
                   onClick={() => setSelectedDay(selectedDay === day.day ? null : day)}
-                  className={`relative overflow-hidden rounded-2xl border-2 cursor-pointer transition-all ${
-                    isToday
+                  className={`relative overflow-hidden rounded-2xl border-2 cursor-pointer transition-all ${isToday
                       ? 'border-emerald-500 shadow-xl shadow-emerald-500/20'
                       : 'border-gray-100 dark:border-gray-800 hover:border-emerald-300'
-                  } ${
-                    selectedDay === day.day ? 'ring-4 ring-emerald-500/20' : ''
-                  }`}
+                    } ${selectedDay === day.day ? 'ring-4 ring-emerald-500/20' : ''
+                    }`}
                 >
                   {/* Background indicator for Ashra */}
                   <div className={`absolute inset-0 ${ashra.bg} opacity-30`} />
-                  
+
                   {/* Accuracy indicator */}
                   {!day.isAccurate && (
                     <div className="absolute top-2 right-2">
@@ -630,15 +627,14 @@ export default function RamzanCalendar() {
                       </span>
                     </div>
                   )}
-                  
+
                   <div className="relative p-5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
                     <div className="flex items-center gap-4 flex-wrap">
                       {/* Day Number */}
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${
-                        isToday
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${isToday
                           ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white'
                           : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'
-                      }`}>
+                        }`}>
                         {day.day}
                       </div>
 
@@ -652,16 +648,15 @@ export default function RamzanCalendar() {
                             {day.islamicDate}
                           </span>
                         </div>
-                        
+
                         {/* Special Highlights */}
                         {highlight && (
-                          <span className={`inline-block mt-1 text-sm font-medium ${
-                            highlight.type === 'qadr' 
-                              ? 'text-yellow-600 dark:text-yellow-400' 
+                          <span className={`inline-block mt-1 text-sm font-medium ${highlight.type === 'qadr'
+                              ? 'text-yellow-600 dark:text-yellow-400'
                               : highlight.type === 'special'
-                              ? 'text-purple-600 dark:text-purple-400'
-                              : 'text-blue-600 dark:text-blue-400'
-                          }`}>
+                                ? 'text-purple-600 dark:text-purple-400'
+                                : 'text-blue-600 dark:text-blue-400'
+                            }`}>
                             {highlight.label}
                           </span>
                         )}
@@ -678,7 +673,7 @@ export default function RamzanCalendar() {
                             Start: {convertTo12Hour(day.sehriStart)}
                           </p>
                         </div>
-                        
+
                         <div className="text-center">
                           <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">🌇 Iftar</p>
                           <p className="text-xl font-mono font-bold text-orange-500 dark:text-orange-400">
@@ -739,7 +734,7 @@ export default function RamzanCalendar() {
                               </p>
                             </div>
                           </div>
-                          
+
                           {/* Accuracy note */}
                           {!day.isAccurate && (
                             <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-3 text-center">
@@ -756,34 +751,34 @@ export default function RamzanCalendar() {
           </motion.div>
 
           {/* Download Options */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
             className="flex justify-center gap-4 mt-8"
           >
-            <button 
-              onClick={() => {
-                toast.success('PDF download feature coming soon!')
-              }}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => downloadRamzanCalendarPDF(ramzanDays, selectedCity)}
               className="flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-emerald-500/30"
             >
               <span>📥</span>
               Download PDF Calendar
-            </button>
+            </motion.button>
           </motion.div>
         </>
       )}
 
       {/* Hadith Section */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.3 }}
         className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-800 to-emerald-900 text-white p-10"
       >
         <div className="absolute inset-0 bg-[url('/islamic-pattern.svg')] opacity-5" />
-        
+
         <div className="relative z-10 text-center max-w-3xl mx-auto">
           <p className="text-emerald-300 text-sm mb-4 tracking-widest">صحيح البخاري</p>
           <p className="text-3xl font-arabic mb-6 leading-relaxed">

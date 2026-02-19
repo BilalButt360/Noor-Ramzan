@@ -15,7 +15,7 @@ export async function GET(request) {
 
   try {
     const response = await fetch(
-      `https://api.aladhan.com/v1/timings/${date}?latitude=${lat}&longitude=${lng}&method=2`,
+      `https://api.aladhan.com/v1/timings/${date}?latitude=${lat}&longitude=${lng}&method=1`,
       {
         headers: {
           'Accept': 'application/json',

@@ -1,6 +1,6 @@
 export async function fetchPrayerTimes({ latitude, longitude }) {
     const res = await fetch(
-        `https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=2`,
+        `https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=1`,
         { cache: 'no-store' }
     )
     const data = await res.json()

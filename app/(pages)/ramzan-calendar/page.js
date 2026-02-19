@@ -1,5 +1,11 @@
+'use client'
 import RamzanCalendar from '@/app/components/RamzanCalendar'
+import PageTransition from '@/app/components/PageTransition'
 
 export default function RamzanCalendarPage() {
-  return <RamzanCalendar/>
+  return (
+    <PageTransition>
+      <RamzanCalendar />
+    </PageTransition>
+  )
 }

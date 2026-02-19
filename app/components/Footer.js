@@ -19,10 +19,10 @@ export default function Footer() {
       { label: 'Zakat Calculator', href: '/zakat' },
     ],
     'Resources': [
-      { label: 'About Ramzan', href: '#' },
-      { label: 'Ramzan Tips', href: '#' },
-      { label: 'Fasting Guide', href: '#' },
-      { label: 'Contact Us', href: '#' },
+      { label: 'About Ramzan', href: '/about-ramzan' },
+      { label: 'Ramzan Tips', href: '/ramzan-tips' },
+      { label: 'Fasting Guide', href: '/fasting-guide' },
+      { label: 'Contact Us', href: '/contact' },
     ],
   }
 
@@ -57,7 +57,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3 group mb-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-all group-hover:scale-110 duration-300">
+              <div className="w-10 h-10 rounded bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-all group-hover:scale-110 duration-300">
                 <span className="text-2xl">🌙</span>
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-400 dark:from-emerald-400 dark:to-emerald-300 bg-clip-text text-transparent">
