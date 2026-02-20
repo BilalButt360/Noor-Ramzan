@@ -43,12 +43,14 @@ const features = [
     href: '/tasbeeh',
     color: 'from-rose-500 to-rose-700',
   },
+  // ✅ NEW: Bayanat Library Feature
   {
-    icon: '🗓️',
-    title: 'Ibadah Planner',
-    desc: 'Set and track your daily Ramzan ibadah goals and habits.',
-    href: '/planner',
-    color: 'from-teal-500 to-teal-700',
+    icon: '🎙️',
+    title: 'Bayanat Library',
+    desc: 'Listen to lectures by Dr. Israr, Molana Tariq Jameel, Dr. Zakir Naik & more.',
+    href: '/bayanat-library',
+    color: 'from-indigo-500 to-indigo-700',
+    // badge: 'New',
   },
 ]
 
@@ -148,7 +150,7 @@ export default function HomePage() {
             transition={{ delay: 0.3 }}
             className="text-white/75 text-lg max-w-xl"
           >
-            Prayer times, Al-Quran, Duas, Tasbeeh counter and Ibadah tracker — everything you need for a blessed Ramzan.
+            Prayer times, Al-Quran, Duas, Tasbeeh counter, Bayanat Library and Ibadah tracker — everything you need for a blessed Ramzan.
           </motion.p>
 
           {/* Countdown */}
@@ -212,10 +214,10 @@ export default function HomePage() {
               🕌 Prayer Times
             </Link>
             <Link
-              href="/duas"
+              href="/bayanat-library"
               className="bg-white/10 backdrop-blur text-white font-semibold px-6 py-2.5 rounded-xl hover:bg-white/20 transition border border-white/20"
             >
-              🤲 Duas
+              🎙️ Bayanat
             </Link>
           </motion.div>
         </div>
@@ -224,10 +226,6 @@ export default function HomePage() {
         <div className="absolute -right-16 -bottom-16 w-80 h-80 bg-emerald-400/20 blur-3xl rounded-full" />
         <div className="absolute right-0 top-0 w-48 h-48 bg-yellow-300/10 blur-2xl rounded-full" />
         
-        {/* Islamic Pattern Overlay */}
-        <svg className="absolute right-10 top-10 w-32 h-32 text-white/5" viewBox="0 0 100 100">
-          <path d="M50 10 L90 30 L90 70 L50 90 L10 70 L10 30 Z" fill="currentColor" />
-        </svg>
       </motion.section>
 
       {/* ── Prayer Times Quick View ── */}
@@ -339,11 +337,19 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 + index * 0.1 }}
               whileHover={{ y: -5 }}
+              className="relative"
             >
               <Link
                 href={f.href}
                 className="group relative overflow-hidden p-6 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:shadow-xl transition-all duration-300 block"
               >
+                {/* Badge for new feature */}
+                {f.badge && (
+                  <span className="absolute top-3 right-3 bg-emerald-500 text-white text-xs px-2 py-1 rounded-full font-semibold animate-pulse">
+                    {f.badge}
+                  </span>
+                )}
+                
                 <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${f.color} text-white text-2xl shadow-lg mb-4 group-hover:scale-110 transition-transform`}>
                   {f.icon}
                 </div>

@@ -362,10 +362,6 @@ export default function RamzanCalendar() {
           <div className="absolute -right-20 -top-20 w-80 h-80 bg-emerald-500/20 rounded-full blur-3xl" />
           <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-teal-500/20 rounded-full blur-3xl" />
 
-          {/* Islamic Pattern */}
-          <svg className="absolute right-10 top-10 w-32 h-32 text-white/5" viewBox="0 0 100 100">
-            <path d="M50 10 L90 30 L90 70 L50 90 L10 70 L10 30 Z" fill="currentColor" />
-          </svg>
         </div>
 
         <div className="relative z-10 p-8 md:p-12">

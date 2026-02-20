@@ -15,13 +15,13 @@ export default function Footer() {
     'Features': [
       { label: 'Digital Tasbeeh', href: '/tasbeeh' },
       { label: 'Ibadah Planner', href: '/planner' },
-      { label: 'Quran Tracker', href: '/quran-tracker' },
+      { label: 'Bayanat Library', href: '/bayanat-library' },
       { label: 'Zakat Calculator', href: '/zakat' },
     ],
     'Resources': [
       { label: 'About Ramzan', href: '/about-ramzan' },
       { label: 'Ramzan Tips', href: '/ramzan-tips' },
-      { label: 'Fasting Guide', href: '/fasting-guide' },
+      // { label: 'Fasting Guide', href: '/fasting-guide' },
       { label: 'Contact Us', href: '/contact' },
     ],
   }

@@ -171,10 +171,10 @@ export default function RamzanTips() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 * i }}
-                  className="flex items-start gap-2 p-3 rounded-lg bg-gray-50 dark:bg-gray-800"
+                  className="flex items-baseline gap-2 p-3 rounded-lg bg-gray-50 dark:bg-gray-800"
                 >
-                  <span className="text-emerald-500 mt-1">✓</span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{tip}</span>
+                  <p className="text-emerald-500 mt-1">✓</p>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{tip}</p>
                 </motion.div>
               ))}
             </div>

@@ -20,7 +20,7 @@ const navItems = [
     icon: '🕌',
   },
   {
-    label: 'Quran',
+    label: 'Al-Quran',
     href: '/al-quran',
     icon: '📖',
     // dropdown: [
@@ -29,8 +29,8 @@ const navItems = [
     //   { label: 'Saved Surahs', href: '/saved-items', desc: 'Your bookmarked Surahs', icon: '🔖' },
     // ]
   },
-  {
-    label: 'Ramzan',
+   {
+    label: 'Ramzan Calendar',
     href: '/ramzan-calendar',
     icon: '🌙',
     // dropdown: [
@@ -41,7 +41,7 @@ const navItems = [
     // ]
   },
   {
-    label: 'Duas',
+    label: 'Duas & Hadith',
     href: '/duas',
     icon: '🤲',
     // dropdown: [
@@ -50,9 +50,14 @@ const navItems = [
     // ]
   },
   {
-    label: 'Tasbeeh',
+    label: 'Digital Tasbeeh',
     href: '/tasbeeh',
     icon: '📿',
+  },
+  {
+    label: 'Bayanat Library',
+    href: '/bayanat-library',
+    icon: '🎙️',
   },
   // {
   //   label: 'Resources',
