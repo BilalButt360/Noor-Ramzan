@@ -69,6 +69,8 @@ export const citiesByProvince = pakistanCities.reduce((acc, city) => {
   return acc
 }, {})
 
+
+
 export function PrayerProvider({ children }) {
   const [prayers, setPrayers] = useState([])
   const [loading, setLoading] = useState(true)

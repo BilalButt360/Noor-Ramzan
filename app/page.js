@@ -113,15 +113,15 @@ export default function HomePage() {
     <div className="space-y-12 pb-12">
 
       {/* ── Hero Section ── */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden rounded-3xl p-8 md:p-14 bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white"
       >
         <div className="relative z-10 max-w-3xl space-y-5">
-          
+
           {/* Greeting Badge */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
@@ -133,7 +133,7 @@ export default function HomePage() {
           </motion.div>
 
           {/* Main Heading */}
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -144,7 +144,7 @@ export default function HomePage() {
           </motion.h1>
 
           {/* Description */}
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -159,14 +159,11 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <p className="text-sm text-white/60 mb-2 uppercase tracking-widest font-medium">
-              Ramzan Countdown
-            </p>
-            <Countdown />
+            <Countdown /> 
           </motion.div>
 
           {/* City Display with Change Option */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -195,7 +192,7 @@ export default function HomePage() {
           </motion.div>
 
           {/* Quick Action Buttons */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
@@ -213,19 +210,13 @@ export default function HomePage() {
             >
               🕌 Prayer Times
             </Link>
-            <Link
-              href="/bayanat-library"
-              className="bg-white/10 backdrop-blur text-white font-semibold px-6 py-2.5 rounded-xl hover:bg-white/20 transition border border-white/20"
-            >
-              🎙️ Bayanat
-            </Link>
           </motion.div>
         </div>
 
         {/* Decorative Elements */}
         <div className="absolute -right-16 -bottom-16 w-80 h-80 bg-emerald-400/20 blur-3xl rounded-full" />
         <div className="absolute right-0 top-0 w-48 h-48 bg-yellow-300/10 blur-2xl rounded-full" />
-        
+
       </motion.section>
 
       {/* ── Prayer Times Quick View ── */}
@@ -243,7 +234,7 @@ export default function HomePage() {
 
         {loading && (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {[1,2,3,4,5].map(i => (
+            {[1, 2, 3, 4, 5].map(i => (
               <div key={i} className="p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 animate-pulse h-24" />
             ))}
           </div>
@@ -269,15 +260,13 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
-                className={`p-4 rounded-2xl transition-all duration-200 ${
-                  p.isNext
+                className={`p-4 rounded-2xl transition-all duration-200 ${p.isNext
                     ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-500/30 scale-105'
                     : 'bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md'
-                }`}
+                  }`}
               >
-                <p className={`text-xs font-semibold uppercase tracking-widest mb-1 ${
-                  p.isNext ? 'text-emerald-200' : 'text-gray-400 dark:text-gray-500'
-                }`}>
+                <p className={`text-xs font-semibold uppercase tracking-widest mb-1 ${p.isNext ? 'text-emerald-200' : 'text-gray-400 dark:text-gray-500'
+                  }`}>
                   {p.name}
                 </p>
                 <p className="text-xl font-bold dark:text-white">
@@ -349,7 +338,7 @@ export default function HomePage() {
                     {f.badge}
                   </span>
                 )}
-                
+
                 <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${f.color} text-white text-2xl shadow-lg mb-4 group-hover:scale-110 transition-transform`}>
                   {f.icon}
                 </div>
@@ -412,7 +401,7 @@ export default function HomePage() {
           {`"Whoever fasts in Ramzan with faith and seeking reward, all his previous sins will be forgiven."`}
         </p>
         <p className="text-emerald-300 text-xs mt-3 font-medium">— Bukhari & Muslim</p>
-        
+
         {/* Decorative elements */}
         <div className="absolute -left-8 -bottom-8 w-40 h-40 bg-emerald-500/20 blur-3xl rounded-full" />
         <div className="absolute -right-8 -top-8 w-32 h-32 bg-yellow-300/10 blur-2xl rounded-full" />

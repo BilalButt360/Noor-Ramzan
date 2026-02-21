@@ -122,5 +122,67 @@ export const scholars = [
         videoCount: 95
       },
     ]
-  }
+  },
+  {
+    id: "mufti-tariq-masood",
+    name: "Mufti Tariq Masood",
+    slug: "mufti-tariq-masood",
+    image: "https://yt3.googleusercontent.com/k7eRJXuxlO8lt0BOkJX7MDHUtOv3YpiLKac1sNSYwtw-fS68yHGOA3nafi4oTjOPyePx-tRqO8s=s160-c-k-c0x00ffffff-no-rj",
+    description: "Renowned Islamic scholar, expert in Fiqh and contemporary issues",
+    totalVideos: 600,
+    categories: [
+      {
+        id: "2026-ramadan",
+        name: "2026 Ramadan",
+        description: "Ramadan 2026 ke khas bayanat - roze, taraweeh, aur ramzan ki fazilat",
+        playlistId: "PLxD3yTnAdbnm9Y1eB43h29CWybpGkbIDu",
+        videoCount: 150
+      },
+      {
+        id: "tafseer-e-quran",
+        name: "Tafseer E Quran",
+        description: "Quran-e-Pak ki tafseer - surah war tafseer bil tafseel",
+        playlistId: "PLxD3yTnAdbnn8WsYtI579GDVJJsh6ISt9",
+        videoCount: 120
+      },
+      {
+        id: "hajj-topics",
+        name: "Hajj Topics",
+        description: "Hajj aur Umrah ke masail - fiqhi ehkaam aur sunnat tareeqa",
+        playlistId: "PLxD3yTnAdbnkGKhQxHQLj0ZgFJHFYzsEs",
+        videoCount: 100
+      }
+    ]
+  },
+  {
+    id: "engineer-muhammad-ali-mirza",
+    name: "Engineer Muhammad Ali Mirza",
+    slug: "engineer-muhammad-ali-mirza",
+    image: "https://yt3.googleusercontent.com/vtAPNiDsR-dPhVyJ3l_GzAmBAq5gIHqCjATerpBIgboPq8Mi56ATT-5hSS6kjT2nikzR35OrcA=s160-c-k-c0x00ffffff-no-rj",
+    description: "Islamic scholar known for research-based approach and comparative studies",
+    totalVideos: 700,
+    categories: [
+      {
+        id: "quran-class",
+        name: "QUR'AN Class",
+        description: "Tafseer-ul-Quran bil Quran - Quran ki tafseer Quran ki roshni mein",
+        playlistId: "PLIemVlvVX-QVibFGcAYyoT89ntCRVDnHG",
+        videoCount: 130
+      },
+      {
+        id: "podcasts-interviews",
+        name: "Podcasts & Interviews",
+        description: "Mukhtalif ulama se munaqashat, sawal-o-jawab aur tabsaray",
+        playlistId: "PLIemVlvVX-QWIJD4ADMRhLweX4wvNcG3g",
+        videoCount: 110
+      },
+      {
+        id: "social-current-affairs",
+        name: "Social & Current Affairs",
+        description: "Asr-e-hazir ke siyasi, samaji aur mashriqi masail ka jaiza",
+        playlistId: "PLIemVlvVX-QV8FyOIJx6sRg5aHZHsyxgE",
+        videoCount: 200
+      }
+    ]
+  },
 ];

@@ -1,5 +1,5 @@
 import AlQuran from "@/app/components/AlQuran"
 
-export default function RamzanCalendarPage() {
+export default function AlQuranPage() {
     return <AlQuran />
 }

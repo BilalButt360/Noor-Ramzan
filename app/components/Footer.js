@@ -21,7 +21,6 @@ export default function Footer() {
     'Resources': [
       { label: 'About Ramzan', href: '/about-ramzan' },
       { label: 'Ramzan Tips', href: '/ramzan-tips' },
-      // { label: 'Fasting Guide', href: '/fasting-guide' },
       { label: 'Contact Us', href: '/contact' },
     ],
   }
